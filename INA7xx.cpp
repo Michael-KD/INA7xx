@@ -2,8 +2,8 @@
 
 INA::INA(uint8_t address, uint16_t chipNumber, uint16_t dividerScaling) {
     if (chipNumber != 780 && chipNumber != 740 && chipNumber != 745) {
-        Serial.println("Error: Invalid chip number. Allowed values are 780, 740, or 745. Setting to default 780.");
-        chipNumber = 780;
+        Serial.println("Error: Invalid chip number. Allowed values are 780, 740, or 745.");
+        while(1);
     }
     this->address = address;
     this->dividerScaling = dividerScaling;
