@@ -34,8 +34,7 @@ double INA::readTemp() {
     int16_t rawValue = static_cast<int16_t>(readRegister16(TEMP_REGISTER));
     rawValue >>= 4; // 12-bit resolution
 
-    double temperature = rawValue * 0.125 * dividerScaling * chipScale; // 125 m°C/LSB
-    return temperature;
+    return rawValue * 0.125 ; // 125 m°C/LSB
 }
 
 double INA::readCurrent() { // 2s complement
@@ -69,6 +68,26 @@ INAValues INA::readAll() {
     return values;
 }
 
+Diagnostics INA::getDiagnostics() {
+    uint16_t diag = readRegister16(DIAG_ALRT_REGISTER);
+    Diagnostics diagnostics;
+    diagnostics.alatch = diag & (1 << 15);
+    diagnostics.cnvr = diag & (1 << 14);
+    diagnostics.slowAlert = diag & (1 << 13);
+    diagnostics.apol = diag & (1 << 12);
+    diagnostics.energyOF = diag & (1 << 11);
+    diagnostics.chargeOF = diag & (1 << 10);
+    diagnostics.mathOF = diag & (1 << 9);
+    diagnostics.tmpOL = diag & (1 << 7);
+    diagnostics.currentOL = diag & (1 << 6);
+    diagnostics.currentUL = diag & (1 << 5);
+    diagnostics.busOL = diag & (1 << 4);
+    diagnostics.busUL = diag & (1 << 3);
+    diagnostics.pol = diag & (1 << 2);
+    diagnostics.cnvrF = diag & (1 << 1);
+    diagnostics.memStat = diag & (1 << 0);
+    return diagnostics;
+}
 
 
 void INA::readRegister(uint8_t reg, char* buffer, uint8_t length) {

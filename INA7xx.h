@@ -11,6 +11,7 @@
 #define ENERGY_REGISTER 0x09
 #define CHARGE_REGISTER 0x0A
 #define TEMP_REGISTER 0x06
+#define DIAG_ALRT_REGISTER 0x0B
 
 struct INAValues {
     double voltage;
@@ -20,6 +21,25 @@ struct INAValues {
     double charge;
     double temp;
 };
+
+struct Diagnostics {
+    bool alatch;
+    bool cnvr;
+    bool slowAlert;
+    bool apol;
+    bool energyOF;
+    bool chargeOF;
+    bool mathOF;
+    bool tmpOL;
+    bool currentOL;
+    bool currentUL;
+    bool busOL;
+    bool busUL;
+    bool pol;
+    bool cnvrF;
+    bool memStat;
+};
+
 
 class INA {
 public:
@@ -34,6 +54,9 @@ public:
     double readEnergy();
     double readCharge();
     INAValues readAll();
+    Diagnostics getDiagnostics();
+
+
 
 private:
     uint8_t address;
