@@ -4,28 +4,42 @@
 #include <Wire.h>
 #include <Arduino.h>
 
+#define MANFID_ADDRESS 0x3E
+#define VOLTAGE_REGISTER 0x05
+#define CURRENT_REGISTER 0x07
+#define POWER_REGISTER 0x08
+#define ENERGY_REGISTER 0x09
+#define CHARGE_REGISTER 0x0A
+#define TEMP_REGISTER 0x06
+
+struct INAValues {
+    double voltage;
+    double current;
+    double power;
+    double energy;
+    double charge;
+    double temp;
+};
+
 class INA {
 public:
-    INA(uint8_t address);
+    INA(uint8_t address, uint16_t chipNumber, uint16_t dividerScaling = 1);
 
     // void begin();
     String getBoardID();
-    uint16_t readVoltage();
-    uint16_t readCurrent();
-    uint32_t readPower();
-    uint64_t readEnergy();
-    uint64_t readCharge();
-    uint16_t readTemp();
+    double readVoltage();
+    double readTemp();
+    double readCurrent();
+    double readPower();
+    double readEnergy();
+    double readCharge();
+    INAValues readAll();
 
 private:
     uint8_t address;
-    const uint8_t MANFID_ADDRESS = 0x3E;
-    const uint8_t VOLTAGE_REGISTER = 0x05;
-    const uint8_t CURRENT_REGISTER = 0x07;
-    const uint8_t POWER_REGISTER = 0x08;
-    const uint8_t ENERGY_REGISTER = 0x09;
-    const uint8_t CHARGE_REGISTER = 0x0A;
-    const uint8_t TEMP_REGISTER = 0x06;
+    uint16_t dividerScaling;
+    uint16_t chipNumber;
+    uint8_t chipScale;
 
     void readRegister(uint8_t reg, char* buffer, uint8_t length);
     uint16_t readRegister16(uint8_t reg);
