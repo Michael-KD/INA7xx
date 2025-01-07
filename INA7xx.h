@@ -8,7 +8,7 @@ class INA {
 public:
     INA(uint8_t address);
 
-    void begin();
+    // void begin();
     String getBoardID();
     uint16_t readVoltage();
     uint16_t readCurrent();
